@@ -1,0 +1,40 @@
+let currentStudentId = 0
+// const students = new Map();
+const { students } = require("../data/sample-student-data")
+
+
+function getAllStudents(){
+    return Array.from(students.values())
+}
+
+function addNewStudent(student){
+    currentStudentId++
+    const newStudent = Object.assign(student, {
+        studentId: currentStudentId,  
+    })
+    students.set(currentStudentId, newStudent)
+    return newStudent
+}
+
+function getStudentById(studentId){
+    const response = students.get(Number(studentId))
+    return response
+}
+
+function updateStudentTrainingData(studentId, trainingData){
+    const currentStudentData = getStudentById(studentId)
+    
+    const updatedStudent = Object.assign(currentStudentData, {
+        studentTraining: trainingData
+    })
+
+    
+    return updatedStudent
+}
+
+module.exports = {
+    getAllStudents,
+    addNewStudent,
+    getStudentById,
+    updateStudentTrainingData
+}
