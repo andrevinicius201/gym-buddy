@@ -1,4 +1,4 @@
-const { getAllStudents, addNewStudent, getStudentById, updateStudentTrainingData } = require("../models/students.model")
+const { getAllStudents, addNewStudent, getStudentById, updateStudentTrainingData, deleteStudent, updateStudentExerciseDetails } = require("../models/students.model")
 
 
 function httpGetAllStudents(req, res){
@@ -21,11 +21,24 @@ function httpUpdateStudentData(req, res){
     return res.status(201).json(updateStudentTrainingData(studentId, newStudentData))
 }
 
+function httpDeleteStudent(req, res){
+    const studentId = req.params.id
+    return res.status(201).json(deleteStudent(studentId))
+}
+
+function httpUpdateExerciseDetails(req, res){
+    const studentId = req.params.studentId
+    const exerciseId = req.params.exerciseId
+    const exerciseData = req.body
+    return res.status(201).json(updateStudentExerciseDetails(studentId, exerciseId, exerciseData))
+}
 
 
 module.exports = {
     httpGetAllStudents,
     httpAddNewStudent,
     httpGetStudentById,
-    httpUpdateStudentData
+    httpUpdateStudentData,
+    httpDeleteStudent,
+    httpUpdateExerciseDetails
 }
