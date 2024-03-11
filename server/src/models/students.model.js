@@ -4,7 +4,7 @@ const { students } = require("../data/sample-student-data")
 
 
 function getAllStudents(){
-    return Array.from(students.values())
+    return Array.from(students.values()).filter((student) => student.isActive == true);
 }
 
 function addNewStudent(student){
@@ -28,6 +28,23 @@ function updateStudentTrainingData(studentId, trainingData){
         studentTraining: trainingData
     })
 
+    return updatedStudent
+}
+
+function updateStudentExerciseDetails(studentId, exerciseId, exerciseData){
+    const updatedStudent = getStudentById(studentId)
+    updatedStudent.studentTraining[exerciseId] = exerciseData
+    return updatedStudent
+    
+    
+}
+
+function deleteStudent(studentId){
+    const currentStudentData = getStudentById(studentId)
+    
+    const updatedStudent = Object.assign(currentStudentData, {
+        isActive: false
+    })
     
     return updatedStudent
 }
@@ -36,5 +53,7 @@ module.exports = {
     getAllStudents,
     addNewStudent,
     getStudentById,
-    updateStudentTrainingData
+    updateStudentTrainingData,
+    deleteStudent,
+    updateStudentExerciseDetails
 }
