@@ -1,6 +1,6 @@
 let currentStudentId = 0
-// const students = new Map();
-const { students } = require("../data/sample-student-data")
+const students = new Map();
+// const { students } = require("../data/sample-student-data")
 
 
 function getAllStudents(){

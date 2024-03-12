@@ -1,6 +1,6 @@
 let currentExerciseId = 0
-// const exercises = new Map();
-const { exercises } = require("../data/sample-exercise-data")
+const exercises = new Map();
+// const { exercises } = require("../data/sample-exercise-data")
 
 function getAllExercises(){
     return Array.from(exercises.values())

@@ -2,3 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+.icon {
+    max-width: 28px;
+    max-height: 28px;
+}

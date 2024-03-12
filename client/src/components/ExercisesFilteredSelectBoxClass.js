@@ -80,13 +80,16 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
                     onChange={this.handleInputChange}
                     name={item.exerciseId}
                     type="checkbox" 
-                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500" 
+                    class="text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600" 
                 />
                 <label for="checkbox-item-11" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"> {item.exerciseName} </label>
-                <label for="checkbox-item-11" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"> Carga cadastrada:  - </label>
-                <label for="checkbox-item-11" class="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300"> Repetições:  - </label>
+                  
+                {
+                    shouldBeSelected ? 
+                    <button onClick={this.toggleModal.bind(this, item.exerciseId, item.exerciseName)} type="button" class="px-3 py-2 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Detalhes</button> :
+                    <img src="img/block-icon.svg" class="icon"/>
+                }
                 
-                <a onClick={this.toggleModal.bind(this, item.exerciseId, item.exerciseName)}> Editar detalhes </a>
                 </div>
             </li>
         )
@@ -128,7 +131,7 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
 
                 </div>
                 <br/>
-                <button type="button" onClick={this.handleSubmit} class="px-5 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Finalizar alterações</button>
+                {/* <button type="button" onClick={this.handleSubmit} class="px-5 py-2.5 text-sm font-medium text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Finalizar alterações</button> */}
                 
                 <Modal show={this.state.openExerciseRegistrationModal} onClose={this.toggleModal}>
                     <Modal.Header> {this.state.currentSelectedExerciseName} </Modal.Header>
