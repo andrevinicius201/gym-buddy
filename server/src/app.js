@@ -1,9 +1,12 @@
 const express = require("express")
+const cors = require("cors")
 const app = express()
+const path = require("path")
+
 const exercisesRouter = require("./routers/exercises.router")
 const studentsRouter = require("./routers/students.router")
-const cors = require("cors")
-const path = require("path")
+const authRouter = require('./routers/auth.router');
+const protected = require('./routers/protected');
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -15,6 +18,8 @@ app.use(express.static(path.join(__dirname, '..', 'public')))
 
 app.use("/exercises", exercisesRouter)
 app.use("/students", studentsRouter)
+app.use("/auth", authRouter)
+app.use("/protected", protected)
 
 app.get("/*", (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'index.html'))

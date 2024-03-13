@@ -4,6 +4,7 @@ import { Modal, Toast } from 'flowbite-react';
 import { useState } from 'react';
 import { HiCheck } from 'react-icons/hi';
 
+
 export default function AllExercisesList() {
     const [showToast, setShowToast] = useState(false);
     const [openModal, setOpenModal] = useState(false);
@@ -62,7 +63,7 @@ export default function AllExercisesList() {
 
     return (
         <div>
-        
+
 <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
     <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
         <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
@@ -114,6 +115,7 @@ export default function AllExercisesList() {
                                 <path clip-rule="evenodd" fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" />
                             </svg>
                         </button>
+                        
                         <div id="filterDropdown" class="z-10 hidden w-56 p-3 bg-white rounded-lg shadow dark:bg-gray-700">
                             <h6 class="mb-3 text-sm font-medium text-gray-900 dark:text-white">Category</h6>
                             <ul class="space-y-2 text-sm" aria-labelledby="filterDropdownButton">
