@@ -13,7 +13,9 @@ import AllExercisesList from "./components/AllExercisesList";
 import StudentTrainingInfo from "./components/StudentTrainingInfo";
 import RestrictPage from "./components/RestrictPage";
 import Home from './components/Home';
-import Menu from './components/Menu'
+import Menu from './components/Menu';
+import RegisterPage from './components/RegisterPage';
+import LoginPage from './components/LoginPage';
 import { AuthProvider } from './Context/AuthContext';
 
 
@@ -26,7 +28,7 @@ function PrivateRoute({ children, isPrivate }) {
   }
 
   if (isPrivate && !authenticated) {
-    return <Navigate to="/" />
+    return <Navigate to="/register" />
   } else {
     return <>{children}</>
   }
@@ -42,8 +44,27 @@ export default function App() {
           <Router>
             <Routes>
                 <Route exact path="/" element={<Home />} /> 
-                <Route exact path="/exercises" element={<AllExercisesList />} />  
-                <Route path="/students" element={<StudentTrainingInfo />} />        
+
+                <Route exact path="/register" element={<RegisterPage />} /> 
+                <Route exact path="/login" element={<LoginPage />} /> 
+                
+                <Route
+                  path="/exercises"
+                  element={
+                    <PrivateRoute isPrivate={true}>
+                      <AllExercisesList/>
+                    </PrivateRoute>
+                  }
+                />     
+                <Route
+                  path="/students"
+                  element={
+                    <PrivateRoute isPrivate={true}>
+                      <StudentTrainingInfo/>
+                    </PrivateRoute>
+                  }
+                />  
+
                 <Route
                   path="/private"
                   element={
