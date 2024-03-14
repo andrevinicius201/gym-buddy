@@ -22,6 +22,7 @@ import { AuthProvider } from './Context/AuthContext';
 function PrivateRoute({ children, isPrivate }) {
  
   const { loading, authenticated } = useContext(Context);
+  console.log("está autenticado? ", authenticated)
 
   if (loading) {
     return <p> Por favor, aguarde.. página em carregamento </p>;

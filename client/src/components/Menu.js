@@ -1,4 +1,9 @@
+import React, { useContext } from 'react';
+import { Context } from '../Context/AuthContext';
+
 export default function Menu() {
+
+  const { authenticated, handleLogout, loggedUser } = useContext(Context);
 
   return (
 
@@ -20,6 +25,9 @@ export default function Menu() {
                 <li>
                   <a href="/students" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Alunos</a>
                 </li>
+                {
+                  authenticated ? <li> Conectado! <a onClick={handleLogout} class="px-3 ml-3 py-2 text-xs font-medium text-center text-white bg-red-700 rounded-lg hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300"> Desconectar </a> </li> : <li> Não conectado </li>
+                }
               </ul>
             </div>
       </div>
