@@ -26,16 +26,16 @@ router.post('/login', async (req, res) => {
         const user = UserModel.getUser(username);
 
         if (!user) {
-            return res.status(401).json({ error: 'Authentication failed' });
+            return res.status(401).json({ error: 'Usuário não encontrado' });
         }
 
         const passwordMatch = await bcrypt.compare(password, user.password);
         
         if (!passwordMatch) {
-            return res.status(401).json({ error: 'Authentication failed' });
+            return res.status(401).json({ error: 'Senha incorreta!' });
         }
 
-        const token = jwt.sign({ userId: user._id }, 'your-secret-key', {
+        const token = jwt.sign({ userId: user._id, subject: username}, 'your-secret-key', {
             expiresIn: '1h',
         });
 
