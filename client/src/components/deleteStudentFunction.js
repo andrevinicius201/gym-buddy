@@ -1,6 +1,6 @@
 import axios from 'axios';
 
 
-export function deleteStudent(studentId){
-    return axios.delete(`http://localhost:8000/students/${studentId}`)
+export function deleteStudent(email){
+    return axios.delete(`http://localhost:8000/students/${email}`)
 }

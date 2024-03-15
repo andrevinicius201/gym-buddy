@@ -4,7 +4,7 @@ import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';    
 
-export default function DeleteStudentModal(studentId){
+export default function DeleteStudentModal(email){
     const [openModal, setOpenModal] = useState(false);
 
     return (

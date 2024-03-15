@@ -22,7 +22,7 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
             openExerciseRegistrationModal: !this.state.openExerciseRegistrationModal
         })
         
-        // return alert(JSON.stringify(this.state.currentSelectedExerciseId))
+
         
       }
 
@@ -32,8 +32,8 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
         super(props);
 
         this.state = {
-            selectedExercises: this.props.studentData.studentTraining,
-            currentStudentId: this.props.studentData.studentId,
+            selectedExercises: this.props.studentData.trainingData ? this.props.studentData.trainingData : {},
+            currentemail: this.props.studentData.email,
             currentStudentData: this.props.studentData,
             setExerciseDetailsModal: false,
             openExerciseRegistrationModal: false,
@@ -65,7 +65,6 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
 
 
     renderExerciseInfo(item){
-
         let shouldBeSelected = this.state.selectedExercises[item.exerciseId]  
 
         return (
@@ -93,13 +92,14 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
                 </div>
             </li>
         )
+      
     }
 
     submitForm(formData){ 
         let payload = {
             trainingInfo: formData
         }
-        axios.put(`http://localhost:8000/students/${this.props.studentData.studentId}`, payload)
+        axios.put(`http://localhost:8000/students/${this.props.studentData.email}`, payload)
         .then(res => {
           console.log(res)
         })
@@ -121,7 +121,7 @@ export default class ExercisesFilteredSelectBoxClass extends Component {
                 <div id="dropdownSearch" class="z-10 bg-white rounded-lg shadow dark:bg-gray-700">
                     <ul class="h-48 px-3 pb-3 overflow-y-auto text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownSearchButton">
                         
-                        {
+                        {                            
                             this.props.muscularGroupData.map(item => 
                                 this.renderExerciseInfo(item)
                             )

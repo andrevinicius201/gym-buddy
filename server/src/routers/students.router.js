@@ -8,7 +8,7 @@ studentsRouter.get("/", httpGetAllStudents)
 studentsRouter.post("/", httpAddNewStudent)
 studentsRouter.get("/:id", httpGetStudentById)
 studentsRouter.put("/:id", httpUpdateStudentData)
-studentsRouter.put("/:studentId/:exerciseId", httpUpdateExerciseDetails)
+studentsRouter.put("/:email/:exerciseId", httpUpdateExerciseDetails)
 studentsRouter.delete("/:id", httpDeleteStudent)
 
 

@@ -1,29 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const UserModel = require('../models/User');
+const StudentModel = require('../models/students.model');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-router.post('/register', async (req, res) => {
-    try {
-        const { username, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const user = { username, password: hashedPassword }
-       
-        UserModel.registerUser(user);
-        
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        res.status(500).json({ error: 'Registration failed' });
-    }
-});
-
-
 router.post('/login', async (req, res) => {
     try {
-        const { username, password } = req.body;
-        const user = UserModel.getUser(username);
+        const { email, password } = req.body;
+        const user = await StudentModel.getStudentById(email);
+
 
         if (!user) {
             return res.status(401).json({ error: 'Usuário não encontrado' });
@@ -35,7 +21,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Senha incorreta!' });
         }
 
-        const token = jwt.sign({ userId: user._id, subject: username}, 'your-secret-key', {
+        const token = jwt.sign({ userId: user._id, subject: email}, 'your-secret-key', {
             expiresIn: '1h',
         });
 
@@ -47,10 +33,5 @@ router.post('/login', async (req, res) => {
 });
 
 
-// Just for testing purposes
-router.get("/list", (req, res) => {
-    const userList = UserModel.getAllUsers()
-    res.status(200).json(userList)
-})
 
 module.exports = router;

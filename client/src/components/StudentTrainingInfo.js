@@ -29,6 +29,7 @@ export default function StudentTrainingInfo( {profile, login, logOut}){
 
 
     function updateModal(student){
+        
         setSelectedStudent(student)
         setOpenExerciseRegistrationModal(true)
     }
@@ -304,7 +305,7 @@ export default function StudentTrainingInfo( {profile, login, logOut}){
                         <Button 
                             color="gray" 
                             onClick={() => {
-                                deleteStudent(selectedStudent.studentId); 
+                                deleteStudent(selectedStudent.email); 
                                 setOpenDeleteStudentModal(false)
                             }}
                         >

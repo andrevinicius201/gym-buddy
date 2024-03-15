@@ -1,11 +1,19 @@
 const mongoose = require("mongoose")
 
 const studentSchema = new mongoose.Schema({
-    studentId: {
-      type: Number,
-      required: true
+    email: {
+        type: String,
+        required: true  
+    },
+    trainingData: {
+        type: Object,
+        required: false  
     },
     name: {
+        type: String,
+        required: false
+    },
+    password: {
         type: String,
         required: true
     },
@@ -13,14 +21,15 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: false
     },
-    studentTraining: {
-        type: Object,
-        required: false
-    },
     isActive: {
         type: Boolean,
         required: false 
+    },
+    role: {
+        type: String,
+        required: false 
     }
+
   });
   
   

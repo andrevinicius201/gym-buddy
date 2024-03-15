@@ -1,13 +1,13 @@
 users = new Map()
 
 function registerUser(userData){
-    users.set(userData.username, userData)
+    users.set(userData.email, userData)
     return userData
 }
 
 
-function getUser(userName){
-    const response = users.get(userName)
+function getUser(email){
+    const response = users.get(email)
     return response
 }
 

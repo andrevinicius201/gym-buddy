@@ -1,19 +1,18 @@
 const students = new Map();
 const sampleStudentData = [
     {
-        studentId: 1,
-        name: "André",
+        email: "André",
         trainingGoal: "Hipertrofia",
         studentTraining: {},
-        isActive: true
-        
+        isActive: true,
+        name: ""
     },
     {
-        studentId: 2,
-        name: "Gabriel",
+        email: "Gabriel",
         trainingGoal: "Emagrecimento",
         studentTraining: {},
-        isActive: true
+        isActive: true,
+        name: ""
     }
 ]
 

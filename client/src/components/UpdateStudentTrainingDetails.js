@@ -8,8 +8,10 @@ import axios from "axios";
 
 export default function UpdateStudentTrainingDetails({studentData, exerciseId}){
 
-    const studentId = studentData.studentId
-    const studentTraining = studentData.studentTraining[exerciseId]
+    
+
+    const email = studentData.email
+    const studentTraining = studentData.trainingData[exerciseId]
     let studentTrainingDetails = {}
 
     if(studentTraining){
@@ -51,12 +53,12 @@ export default function UpdateStudentTrainingDetails({studentData, exerciseId}){
         const payload = {
             "currentlyPracticed":true, "load":formData.load, "series":formData.series, "repetitions":formData.repetitions, "observations":formData.observations
         }
-        submitForm(studentId, exerciseId, payload)
+        submitForm(email, exerciseId, payload)
     }
 
-    function submitForm(studentId, exerciseId, updatedExercise){
+    function submitForm(email, exerciseId, updatedExercise){
     
-        axios.put(`http://localhost:8000/students/${studentId}/${exerciseId}`, updatedExercise)
+        axios.put(`http://localhost:8000/students/${email}/${exerciseId}`, updatedExercise)
         .then(res => {
             if((res.status) === 201){
                 alert("Exercicio alterado com sucesso")
@@ -72,7 +74,6 @@ export default function UpdateStudentTrainingDetails({studentData, exerciseId}){
 
     return (
         <div class="relative p-4 w-full max-w-md max-h-full">
-            
             <form onSubmit={handleSubmit}>
                 <label for="load" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"> Carga (KG) </label>
                 <input

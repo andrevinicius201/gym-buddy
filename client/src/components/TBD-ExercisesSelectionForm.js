@@ -10,7 +10,7 @@ export default class ExercisesSelectionForm extends React.Component{
         super(props)
         this.state = {
             selectedExercises: this.props.studentData.studentTraining,
-            currentStudentId: this.props.studentData.studentId
+            currentemail: this.props.studentData.email
         }
     }
 
