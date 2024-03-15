@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const studentSchema = new mongoose.Schema({
     studentId: {
       type: Number,
-      required: false
+      required: true
     },
     name: {
         type: String,
@@ -14,11 +14,11 @@ const studentSchema = new mongoose.Schema({
         required: false
     },
     studentTraining: {
-        type: String,
+        type: Object,
         required: false
     },
     isActive: {
-        type: String,
+        type: Boolean,
         required: false 
     }
   });
