@@ -29,23 +29,21 @@ async function getStudentById(email){
 
 async function updateStudentExerciseDetails(email, exerciseId, exerciseData) {
     
-        const doc = await Student.findOne({ email: email });
-        let previousTraining = doc.trainingData
+    const doc = await Student.findOne({ email: email });
+    let previousTraining = doc.trainingData
 
-        if(!previousTraining){
-            previousTraining = {
-                [exerciseId]: exerciseData
-            }
-        } else {   
-            previousTraining[exerciseId] = exerciseData
+    if(!previousTraining){
+        previousTraining = {
+            [exerciseId]: exerciseData
         }
+    } else {   
+        previousTraining[exerciseId] = exerciseData
+    }
 
-        const update = { trainingData: previousTraining };
-    
-        await doc.updateOne(update);
+    const update = { trainingData: previousTraining };
 
+    await doc.updateOne(update);
 
-    
     // await doc.save();
     
 }

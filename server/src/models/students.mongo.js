@@ -5,6 +5,10 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true  
     },
+    role: {
+        type: String,
+        required: true 
+    },
     trainingData: {
         type: Object,
         required: false  
@@ -25,9 +29,10 @@ const studentSchema = new mongoose.Schema({
         type: Boolean,
         required: false 
     },
-    role: {
+
+    activation_code: {
         type: String,
-        required: false 
+        required: false    
     }
 
   });
