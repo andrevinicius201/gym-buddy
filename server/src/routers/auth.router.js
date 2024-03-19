@@ -21,7 +21,7 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Senha incorreta!' });
         }
 
-        const token = jwt.sign({ userId: user._id, subject: email}, 'your-secret-key', {
+        const token = jwt.sign({ userId: user._id, subject: email, role:user.role}, 'your-secret-key', {
             expiresIn: '1h',
         });
 

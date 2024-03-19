@@ -1,6 +1,5 @@
 // const students = new Map();
 // const { students } = require("../data/sample-student-data")
-const studentsMongo = require("../models/students.mongo");
 const Student = require("../models/students.mongo")
 
 async function getAllStudents() {

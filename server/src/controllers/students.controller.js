@@ -14,13 +14,12 @@ async function httpAddNewStudent(req, res){
     // Somente valida o código caso o usuário a ser criado seja gym-admin
     if(req.body.role == "gym-admin") {
         const code_available = await code_service.httpValidateCode(req.body.activation_code)
-        console.log(code_available)
         if(code_available == true){
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
             Object.assign(student, {
                 password: hashedPassword,
             })
-            const invalidation = await code_service.httpInvalidateCode(req.body.activation_code)
+            await code_service.httpInvalidateCode(req.body.activation_code)
             return res.status(201).json(await addNewStudent(student))
         } else {
             return res.status(201).json({msg: "Código inválido"})
@@ -30,7 +29,6 @@ async function httpAddNewStudent(req, res){
         Object.assign(student, {
             password: hashedPassword,
         })
-        console.log(student)
         return res.status(201).json(await addNewStudent(student))
     }
 
