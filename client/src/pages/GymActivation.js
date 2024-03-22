@@ -1,18 +1,7 @@
-import React, { useContext } from 'react';
+import React from "react"
 import axios from 'axios';
-import {
-    BrowserRouter as Router,
-    Routes,
-    Route,
-    Navigate
-  } from "react-router-dom";
 
-import { Context } from '../Context/AuthContext';
-
-
-export default function LoginPage(){
-
-    const { authenticated, handleLogin } = useContext(Context);
+export default function GymActivation(){
 
     const [formData, setFormData] = React.useState({})
 
@@ -24,11 +13,26 @@ export default function LoginPage(){
                 [name]: value
             }
         })
+        
+    }
+
+    function submitForm(formData){
+        axios.post(`http://localhost:8000/students`, formData)
+        .then(res => {
+          if((res.status) === 201){
+            alert("Usuario registrado com sucesso")
+          } else {
+            alert("nao funcionou")
+          }
+        })
+        .catch((err) => {
+            alert("Erro ao tentar registrar aluno")
+        })
     }
 
     function handleSubmit(event){
         event.preventDefault()
-        handleLogin(formData)
+        submitForm(formData)
     }
 
 
@@ -39,7 +43,7 @@ export default function LoginPage(){
           <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
               
               <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Login de usuário
+                  Ativação da conta de administrador
               </h1>
               <form class="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
                   <div>
@@ -53,7 +57,7 @@ export default function LoginPage(){
                  
                   <button type="submit" class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Criar conta</button>
                   <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                    Se ainda não possui uma conta cadastre-se<a href="/register" class="font-medium text-primary-600 hover:underline dark:text-primary-500"> clicando aqui</a>
+                    Já possui uma conta? <a href="/login" class="font-medium text-primary-600 hover:underline dark:text-primary-500">Fazer login</a>
                   </p>
               </form>
           </div>

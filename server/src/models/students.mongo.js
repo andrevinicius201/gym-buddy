@@ -1,26 +1,31 @@
 const mongoose = require("mongoose")
 
 const studentSchema = new mongoose.Schema({
-    email: {
+    studentId: {
         type: String,
-        required: true  
-    },
-    role: {
-        type: String,
-        required: true 
-    },
-    trainingData: {
-        type: Object,
-        required: false  
+        required: true
     },
     name: {
         type: String,
-        required: false
+        required: true
     },
     password: {
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        required: true 
+    },
+    email: {
+        type: String,
+        required: false  
+    },
+    trainingData: {
+        type: Object,
+        required: false  
+    },
+    
     trainingGoal: {
         type: String,
         required: false

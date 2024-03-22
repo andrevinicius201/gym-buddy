@@ -13,6 +13,32 @@ const accessCodeSchema = new mongoose.Schema({
 
 const ValidationCode = mongoose.model('access-codes', accessCodeSchema);
 
+
+async function getRegistrationCodes(){
+   
+    const response = await ValidationCode.find()
+    
+    if(response.length == 0){
+        return {msg:"No registration codes found"}
+    }
+
+    return response
+
+}
+
+async function getRegistrationCode(registrationCode){
+   
+    const response = await ValidationCode.find({temporaryCode:registrationCode})
+    
+    if(response.length == 0){
+        return {msg:"No registration codes found"}
+    }
+
+    return response
+
+}
+
+
 async function addRegistrationCode({ temporaryCode, available }){
     
     try {
@@ -26,26 +52,19 @@ async function addRegistrationCode({ temporaryCode, available }){
 }
 
 async function validateCode(access_code){
-    console.log(access_code)
     const rescuedCode = await ValidationCode.findOne({temporaryCode: access_code})
     if(rescuedCode && rescuedCode.available){
-        response = await ValidationCode.updateOne({temporaryCode: "new-code"}, { available: false })
-        return response
+        response = await ValidationCode.updateOne({temporaryCode: access_code}, { available: false })
+        return true
     } else {
         return false
     }
 }
 
-// async function invalidateCode(access_code){
-
-//     await ValidationCode.updateOne({temporaryCode: "new-code"}, { available: false })
-//     .catch(err => {
-//         return "error when trying to update code status"
-//     })
-
-// }
 
 module.exports = {
     validateCode,
-    addRegistrationCode
+    addRegistrationCode,
+    getRegistrationCodes,
+    getRegistrationCode
 }

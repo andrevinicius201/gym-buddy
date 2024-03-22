@@ -9,14 +9,14 @@ import {
 
 import { Context } from './Context/AuthContext';
 
-import AllExercisesList from "./components/AllExercisesList";
-import StudentTrainingInfo from "./components/StudentTrainingInfo";
-import RestrictPage from "./components/RestrictPage";
-import Home from './components/Home';
+import AllExercisesList from "./pages/ExercisesList";
+import StudentsList from "./pages/StudentsList";
+import Home from './pages/Home';
 import Menu from './components/Menu';
-import RegisterPage from './components/RegisterPage';
-import LoginPage from './components/LoginPage';
+import RegisterPage from './pages/GymActivation';
+import LoginPage from './pages/Login';
 import { AuthProvider } from './Context/AuthContext';
+import StudentTrainingEdit from './pages/StudentTrainingEdit';
 
 
 function PrivateRoute({ children, isPrivate }) {
@@ -52,7 +52,7 @@ export default function App() {
                 <Route
                   path="/exercises"
                   element={
-                    <PrivateRoute isPrivate={true}>
+                    <PrivateRoute isPrivate={false}>
                       <AllExercisesList/>
                     </PrivateRoute>
                   }
@@ -60,21 +60,20 @@ export default function App() {
                 <Route
                   path="/students"
                   element={
-                    <PrivateRoute isPrivate={true}>
-                      <StudentTrainingInfo/>
+                    <PrivateRoute isPrivate={false}>
+                      <StudentsList/>
                     </PrivateRoute>
                   }
                 />  
 
                 <Route
-                  path="/private"
+                  path="/students/:id"
                   element={
-                    <PrivateRoute isPrivate={true}>
-                      <RestrictPage/>
+                    <PrivateRoute isPrivate={false}>
+                      <StudentTrainingEdit />
                     </PrivateRoute>
                   }
                 />
-
           </Routes> 
       
         </Router> 

@@ -1,15 +1,16 @@
 const express = require("express")
 
-const { httpGetAllStudents, httpAddNewStudent, httpGetStudentById, httpUpdateStudentData, httpDeleteStudent, httpUpdateExerciseDetails } = require("../controllers/students.controller")
+const { httpGetAllStudents, httpAddNewStudent, httpGetStudentById, httpUpdateStudentData, httpDeleteStudent, httpUpdateExerciseDetails, httpDeleteAllStudents, httpAddStudentTraining } = require("../controllers/students.controller")
 
-const studentsRouter = express.Router()
+const usersRouter = express.Router()
 
-studentsRouter.get("/", httpGetAllStudents)
-studentsRouter.post("/", httpAddNewStudent)
-studentsRouter.get("/:id", httpGetStudentById)
-studentsRouter.put("/:id", httpUpdateStudentData)
-studentsRouter.put("/:email/:exerciseId", httpUpdateExerciseDetails)
-studentsRouter.delete("/:id", httpDeleteStudent)
+usersRouter.get("/", httpGetAllStudents)
+usersRouter.post("/", httpAddNewStudent)
+usersRouter.put("/:studentId/training", httpAddStudentTraining)
+usersRouter.get("/:id", httpGetStudentById)
+usersRouter.put("/:id", httpUpdateStudentData)
+usersRouter.delete("/:studentId", httpDeleteStudent)
+usersRouter.delete("/", httpDeleteAllStudents)
 
 
-module.exports = studentsRouter
+module.exports = usersRouter

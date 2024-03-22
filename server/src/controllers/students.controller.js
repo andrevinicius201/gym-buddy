@@ -1,39 +1,19 @@
-const bcrypt = require('bcrypt');
-
-const { getAllStudents, addNewStudent, getStudentById, updateStudentTrainingData, deleteStudent, updateStudentExerciseDetails } = require("../models/students.model")
-const code_service = require("../controllers/activation-code.controller")
+const { getAllStudents, addNewStudent, getStudentById, updateStudentTrainingData, deleteStudent, updateStudentExerciseDetails, deleteAllStudents, addStudentTraining } = require("../models/students.model")
 
 async function httpGetAllStudents(req, res){
     return res.status(200).json(await getAllStudents())
 }
 
-async function httpAddNewStudent(req, res){
+async function httpAddNewStudent(req, res){   
+    response = await addNewStudent(req.body)
+    return res.status(response.code).json(response) 
+}
 
-    const student = req.body
-    
-    // Somente valida o código caso o usuário a ser criado seja gym-admin
-    if(req.body.role == "gym-admin") {
-        const code_available = await code_service.httpValidateCode(req.body.activation_code)
-        if(code_available == true){
-            const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            Object.assign(student, {
-                password: hashedPassword,
-            })
-            await code_service.httpInvalidateCode(req.body.activation_code)
-            return res.status(201).json(await addNewStudent(student))
-        } else {
-            return res.status(201).json({msg: "Código inválido"})
-        }
-    } else {
-        const hashedPassword = await bcrypt.hash(req.body.password, 10);
-        Object.assign(student, {
-            password: hashedPassword,
-        })
-        return res.status(201).json(await addNewStudent(student))
-    }
-
-    
-    
+async function httpAddStudentTraining(req, res){
+    const studentId = req.params.studentId
+    const trainingDetails = req.body
+    response = await addStudentTraining(studentId,trainingDetails)
+    return res.status(201).json(response) 
 }
 
 async function httpGetStudentById(req, res) {
@@ -48,8 +28,13 @@ async function httpUpdateStudentData(req, res){
 }
 
 async function httpDeleteStudent(req, res){
-    const email = req.params.id
-    return res.status(201).json(await deleteStudent(email))
+    const studentId = req.params.studentId
+    return res.status(201).json(await deleteStudent(studentId))
+}
+
+
+async function httpDeleteAllStudents(req, res){
+    return res.status(201).json(await deleteAllStudents())
 }
 
 async function httpUpdateExerciseDetails(req, res){
@@ -66,5 +51,7 @@ module.exports = {
     httpGetStudentById,
     httpUpdateStudentData,
     httpDeleteStudent,
-    httpUpdateExerciseDetails
+    httpUpdateExerciseDetails,
+    httpDeleteAllStudents,
+    httpAddStudentTraining
 }

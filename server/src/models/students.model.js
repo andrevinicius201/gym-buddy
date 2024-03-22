@@ -1,21 +1,75 @@
-// const students = new Map();
-// const { students } = require("../data/sample-student-data")
 const Student = require("../models/students.mongo")
+const Validator = require("../models/validator.model")
+const bcrypt = require("bcrypt")
+
+const DEFAULT_STUDENT_ID = 0;
+
+async function getLatestStudentId() {
+    const latestRegisteredStudent = await Student.findOne().sort('-studentId');
+  
+    if (!latestRegisteredStudent) {
+      return DEFAULT_STUDENT_ID;
+    }  
+    return Number(latestRegisteredStudent.studentId);
+}
 
 async function getAllStudents() {
     response = await Student.find({})
     return response
 }
 
-async function addNewStudent(student){
-    const response = await Student.create(student);
-    return response
+async function addNewStudent(user){
+
+    const userDataIsValid = await Validator.checkUserData(user)
+
+    if(!userDataIsValid){
+        return {
+            code: 400,
+            msg: "Error! 'access_code' field is missing or invalid"
+        }
+    }
+
+    try {
+
+        const newStudentId = await getLatestStudentId() + 1;
+
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+
+        Object.assign(user, {
+            studentId: newStudentId,
+            password: hashedPassword,
+        })
+        
+        const response = await Student.create(user)
+        
+        return {
+            code: 201,
+            msg: "User successfully created!"
+        }
+    } catch(err){
+        return {
+            msg: `The following error occurred: ${err}`
+        }
+    }
+
 }
 
-async function getStudentById(email){
+async function addStudentTraining(studentId, trainingDetails){
+    const doc = await Student.findOne({ studentId: studentId });
+    const update = { trainingData: trainingDetails };
+    await doc.updateOne(update);
+    await doc.save();
+
+    return {
+        code: 201,
+        msg: "Student training updated succesfully"
+    }
+}
+
+async function getStudentById(studentId){
 
     let filter = {
-        email:email
+        studentId:studentId
     }
     const response = await Student.findOne(filter);
     if(response){
@@ -48,11 +102,26 @@ async function updateStudentExerciseDetails(email, exerciseId, exerciseData) {
 }
 
 
-async function deleteStudent(email){
-    await Student.deleteOne({ email:email })
-    return {
-        msg: "Student deleted successfully"
+async function deleteStudent(studentId){
+    response = await Student.deleteOne({ studentId:studentId })
+    if(response.deletedCount){
+        return {
+            code: 201,
+            msg: "Student deleted successfully"
+        }
+    } else {
+        return {
+            code: 404,
+            msg: "No student was found with the given studentId"
+        }
     }
+    
+}
+
+
+async function deleteAllStudents(){
+    const response = await Student.deleteMany()
+    return response
 }
 
 
@@ -61,7 +130,9 @@ module.exports = {
     addNewStudent,
     getStudentById,
     updateStudentExerciseDetails,
-    deleteStudent
+    deleteStudent,
+    deleteAllStudents,
+    addStudentTraining
 }
 
 

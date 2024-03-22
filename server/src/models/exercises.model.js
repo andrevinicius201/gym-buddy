@@ -1,6 +1,3 @@
-// let currentExerciseId = 0
-// const exercises = new Map();
-// const { exercises } = require("../data/sample-exercise-data")
 const Exercise = require("../models/exercises.mongo")
 
 const DEFAULT_EXERCISE_ID = 0;
@@ -16,7 +13,19 @@ async function getLatestExerciseId() {
 
 async function getAllExercises() {
     response = await Exercise.find({})
-    return response
+    let transformedExercistList = {}
+    
+    response.forEach(obj => {
+        let exerciseId = obj.exerciseId
+        transformedExercistList[exerciseId] = {
+            exerciseName:obj.exerciseName,
+            muscularGroup:obj.muscularGroup,
+            exerciseDescription:obj.exerciseDescription
+
+        }
+    });
+ 
+    return transformedExercistList
 }
 
 
@@ -30,9 +39,32 @@ async function addExercise(exercise){
 }
 
 
+async function deleteExercise(exerciseId){
+    const response = await Exercise.deleteOne({ exerciseId: exerciseId })
+    return response
+}
+
+
+async function deleteAllExercises(){
+    const response = await Exercise.deleteMany()
+    return response
+}
+
+async function updateExerciseDetails(exerciseId, updatedDetails){
+    
+    const doc = await Exercise.findOne({ exerciseId: exerciseId });
+    const response = await doc.updateOne(updatedDetails);
+
+    return response
+}
+
+
 module.exports = {
     getAllExercises,
-    addExercise
+    addExercise,
+    deleteExercise,
+    deleteAllExercises,
+    updateExerciseDetails
 }
 
 

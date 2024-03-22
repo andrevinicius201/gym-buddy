@@ -4,16 +4,16 @@ import { useState } from 'react';
 import { Button, Toast } from 'flowbite-react';
 import { HiCheck } from 'react-icons/hi';
 
-export default function StudentRegistrationForm () {
+export default function StudentAccountCreationForm () {
 
     const [showToast, setShowToast] = useState(false);
     
     const [formData, setFormData] = React.useState(
         {
             name: "", 
-            trainingGoal: "", 
-            studentTraining: {},
-            isActive: true
+            password: "",
+            role: "student",
+            trainingGoal: ""
         }
     )
 
@@ -32,7 +32,6 @@ export default function StudentRegistrationForm () {
         axios.post(`http://localhost:8000/students`, formData)
         .then(res => {
           if((res.status) === 201){
-            // document.getElementById("toast-success").setAttribute("style", "display: flex")
             setShowToast((state) => !state)
           } else {
             alert("nao funcionou")
@@ -51,8 +50,7 @@ export default function StudentRegistrationForm () {
     return (      
 
         <div> 
-            
-
+       
             <form class="max-w-sm mx-auto" onSubmit={handleSubmit}>
             <div class="mb-5">
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome do aluno </label>
@@ -83,9 +81,6 @@ export default function StudentRegistrationForm () {
                     </Toast>
                 )}
             </div>
-
-
-
 
         </div>
     )

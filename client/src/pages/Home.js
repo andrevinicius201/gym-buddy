@@ -22,7 +22,7 @@ export default function Home(){
             </div>
             <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12">
                
-                <h2 class="text-gray-900 dark:text-white text-3xl font-extrabold mb-2">Acesso à página de alunos</h2>
+                <h2 class="text-gray-900 dark:text-white text-3xl font-extrabold mb-2"> Acesso à página de alunos</h2>
                 <p class="text-lg font-normal text-gray-500 dark:text-gray-400 mb-4">Gerencie os alunos cadastrados e seus treinos</p>
                 <a href="/students" class="text-blue-600 dark:text-blue-500 hover:underline font-medium text-lg inline-flex items-center"> Página de alunos
                     <svg class="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
