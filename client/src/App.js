@@ -13,16 +13,17 @@ import AllExercisesList from "./pages/ExercisesList";
 import StudentsList from "./pages/StudentsList";
 import Home from './pages/Home';
 import Menu from './components/Menu';
+import ActivationCodeCreationForm from './components/ActivationCodeCreationForm';
 import RegisterPage from './pages/GymActivation';
 import LoginPage from './pages/Login';
 import { AuthProvider } from './Context/AuthContext';
 import StudentTrainingEdit from './pages/StudentTrainingEdit';
+import { jwtDecode } from 'jwt-decode' 
 
 
 function PrivateRoute({ children, isPrivate }) {
  
-  const { loading, authenticated } = useContext(Context);
-  console.log("está autenticado? ", authenticated)
+  const { loading, authenticated, role } = useContext(Context);
 
   if (loading) {
     return <p> Por favor, aguarde.. página em carregamento </p>;
@@ -31,6 +32,7 @@ function PrivateRoute({ children, isPrivate }) {
   if (isPrivate && !authenticated) {
     return <Navigate to="/register" />
   } else {
+
     return <>{children}</>
   }
 
@@ -38,6 +40,8 @@ function PrivateRoute({ children, isPrivate }) {
 
 
 export default function App() {
+  const userRole = localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')).role : undefined
+  localStorage.setItem('loggedUserRole', userRole)
 
   return (
     <AuthProvider>
@@ -52,15 +56,16 @@ export default function App() {
                 <Route
                   path="/exercises"
                   element={
-                    <PrivateRoute isPrivate={false}>
+                    <PrivateRoute isPrivate={true}>
                       <AllExercisesList/>
                     </PrivateRoute>
                   }
-                />     
+                />
+
                 <Route
                   path="/students"
                   element={
-                    <PrivateRoute isPrivate={false}>
+                    <PrivateRoute isPrivate={true}>
                       <StudentsList/>
                     </PrivateRoute>
                   }
@@ -69,13 +74,21 @@ export default function App() {
                 <Route
                   path="/students/:id"
                   element={
-                    <PrivateRoute isPrivate={false}>
+                    <PrivateRoute isPrivate={true}>
                       <StudentTrainingEdit />
                     </PrivateRoute>
                   }
                 />
+
+                <Route
+                  path="/administration/registration-code-creation"
+                  element={
+                    <PrivateRoute isPrivate={true}>
+                      <ActivationCodeCreationForm />
+                    </PrivateRoute>
+                  }
+                />
           </Routes> 
-      
         </Router> 
     </AuthProvider>
   )

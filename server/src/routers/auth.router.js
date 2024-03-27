@@ -10,8 +10,10 @@ const {register} = require("../services/register.service")
 
 router.post('/login', async (req, res) => {
     try {
-        const { email, password } = req.body;
-        const user = await StudentModel.getStudentById(email);
+        let username = req.body.user
+        let password = req.body.password
+       
+        const user = await StudentModel.getStudentByUserName(username);
 
 
         if (!user) {
@@ -24,9 +26,11 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Senha incorreta!' });
         }
 
-        const token = jwt.sign({ userId: user._id, subject: email, role:user.role}, 'your-secret-key', {
+        const token = jwt.sign({ userId: user._id, subject: user.name, role:user.role}, 'your-secret-key', {
             expiresIn: '1h',
         });
+
+        
 
         res.status(200).json({ token })
 

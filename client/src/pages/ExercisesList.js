@@ -18,7 +18,7 @@ export default function AllExercisesList() {
         setExerciseListIsLoading(false)
       })
       .catch((err) => {
-        alert("Erro ao carregar os exercicios")
+        alert("O seguinte erro ocorreu ao carregar os exercícios", err)
        })
     }, [])
 
@@ -65,6 +65,7 @@ export default function AllExercisesList() {
     return (
         
         <div>
+                
                 {(!exerciseListIsLoading) &&
                 <div>
                         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">

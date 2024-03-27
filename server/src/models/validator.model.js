@@ -1,5 +1,4 @@
-const bcrypt = require("bcrypt")
-const code_service = require("./access-code.model")
+const code_service = require("./activation-code.model")
 
 async function checkUserData(user) {
     
@@ -7,11 +6,11 @@ async function checkUserData(user) {
         return true
     } 
 
-    const codeIsAvailable = await code_service.validateCode(user.access_code)
+
+    const codeIsAvailable = await code_service.validateActivationCode(user.activation_code)
     return codeIsAvailable ? true : false
     
 }
-
 
 
 module.exports = {

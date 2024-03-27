@@ -6,7 +6,6 @@ const path = require("path")
 const exercisesRouter = require("./routers/exercises.router")
 const studentsRouter = require("./routers/students.router")
 const authRouter = require('./routers/auth.router');
-const protected = require('./routers/protected');
 const accessCodeRouter = require('./routers/access-code.router');
 const TrainingRouter = require("./routers/training.router")
 
@@ -21,7 +20,6 @@ app.use(express.static(path.join(__dirname, '..', 'public')))
 app.use("/exercises", exercisesRouter)
 app.use("/students", studentsRouter)
 app.use("/auth", authRouter)
-app.use("/protected", protected)
 app.use("/access-code", accessCodeRouter)
 app.use("/trainings", TrainingRouter)
 

@@ -1,31 +1,40 @@
 
 const { z } = require("zod")
-const { addRegistrationCode, validateCode, getRegistrationCodes, getRegistrationCode } = require("../models/access-code.model")
+const {     
+    getActivationCodes,
+    getActivationCode,
+    addActivationCode,
+    validateActivationCode,
+    deleteAllActivationCodes } = require("../models/activation-code.model")
 
 
-async function httpGetAllRegistrationCodes(req, res){
-    return res.status(200).json(await getRegistrationCodes()) 
+async function httpGetAllActivationCodes(req, res){
+    return res.status(200).json(await getActivationCodes()) 
 }
 
-async function httpGetRegistrationCode(req, res){
-    return res.status(200).json(await getRegistrationCode(req.params.code)) 
+async function httpGetActivationCode(req, res){
+    return res.status(200).json(await getActivationCode(req.params.code)) 
 }
 
-async function httpAddRegistrationCode(req, res){
+async function httpAddActivationCode(req, res){
  
     const registrationPayload = {
-        temporaryCode: req.body.temporaryCode,
+        activation_code: req.body.activation_code,
         available:true
     }    
 
-    return res.status(201).json(await addRegistrationCode(registrationPayload))
+    const response = await addActivationCode(registrationPayload)
+
+    return res.status(response.code).json(response.message)
 }
 
-async function httpValidateCode(req, res){
-    const validationCode = req.body.validationCode
-    return res.status(201).json(await validateCode(validationCode))
+async function httpValidateActivationCode(req, res){
+    return res.status(201).json(await validateActivationCode(req.body.activation_code))
+}
+
+async function httpDeleteAllActivationCodes(req, res){
+    return res.status(201).json(await deleteAllActivationCodes())
 }
 
 
-
-module.exports = {httpValidateCode, httpAddRegistrationCode, httpGetAllRegistrationCodes, httpGetRegistrationCode}
+module.exports = {httpValidateActivationCode, httpAddActivationCode, httpGetAllActivationCodes, httpGetActivationCode, httpDeleteAllActivationCodes}

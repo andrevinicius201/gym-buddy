@@ -1,0 +1,32 @@
+{
+  "roles": [
+    {
+      "name": "gym-admin",
+      "permissions": [
+        "get_all_users",
+        "get_user",
+        "register_user",
+        "delete_user",
+        "update_user",
+        "update_user_training"
+      ]
+    },
+    {
+      "name": "instructor",
+      "permissions": [
+        "get_all_users",
+        "get_user",
+        "register_user",
+        "update_user",
+        "update_user_training"
+      ]
+    },
+    {
+      "name": "student",
+      "permissions": [
+        "get_user",
+        "update_user_training"
+      ]
+    }
+  ]
+}

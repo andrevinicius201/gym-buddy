@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useEffect } from 'react'
 import { Button, Modal } from 'flowbite-react';
 import { useState } from 'react';
-import StudentAccountCreationForm from './StudentAccountCreation';
+import StudentAccountCreationForm from '../components/StudentAccountCreationForm';
 import { HiOutlineExclamationCircle } from 'react-icons/hi';  
 import { deleteStudent } from '../functions/deleteStudent';
 import { useNavigate } from 'react-router-dom';

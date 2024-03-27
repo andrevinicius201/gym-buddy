@@ -2,14 +2,20 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode' 
 
+import {
+  Navigate
+} from "react-router-dom";
+
+
 const api = axios.create({
   baseURL: 'http://localhost:8000',
 })
 
 export default function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [role, setRole] = useState(undefined);
   const [loading, setLoading] = useState(true);
-  const [loggedUser, setLoggedUser] = useState(undefined);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -25,11 +31,12 @@ export default function useAuth() {
   async function handleLogin(formData){
     try {
       const { data: { token } } = await api.post('/auth/login', formData);
-      const tokenData = jwtDecode(token)
+      // const tokenData = jwtDecode(token)
       localStorage.setItem('token', JSON.stringify(token));
       api.defaults.headers.Authorization = `Bearer ${token}`;
       setAuthenticated(true);
-      setLoggedUser(tokenData.subject);
+      setRole(jwtDecode(token).role);
+      alert("Usuário autenticado com sucesso! ")
     }
     catch(err) {
       alert("Usuário ou senha incorretos")
@@ -41,9 +48,9 @@ export default function useAuth() {
   function handleLogout() {
     setAuthenticated(false);
     localStorage.removeItem('token');
-    setLoggedUser(undefined);
+    localStorage.removeItem('loggedUserRole');
     api.defaults.headers.Authorization = undefined;
   }
   
-  return { authenticated, loggedUser, loading, handleLogin, handleLogout };
+  return { authenticated, role, loading, handleLogin, handleLogout };
 }

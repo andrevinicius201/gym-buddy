@@ -21,11 +21,11 @@ async function getAllStudents() {
 async function addNewStudent(user){
 
     const userDataIsValid = await Validator.checkUserData(user)
-
+    
     if(!userDataIsValid){
         return {
             code: 400,
-            msg: "Error! 'access_code' field is missing or invalid"
+            msg: "Error! 'activation_code' field is missing or invalid"
         }
     }
 
@@ -48,6 +48,7 @@ async function addNewStudent(user){
         }
     } catch(err){
         return {
+            code: 400,
             msg: `The following error occurred: ${err}`
         }
     }
@@ -57,8 +58,17 @@ async function addNewStudent(user){
 async function addStudentTraining(studentId, trainingDetails){
     const doc = await Student.findOne({ studentId: studentId });
     const update = { trainingData: trainingDetails };
-    await doc.updateOne(update);
-    await doc.save();
+
+    try {
+        await doc.updateOne(update);
+        await doc.save();
+    } catch (err) {
+        return {
+            code: 404,
+            msg: "No student was found with the given ID"
+        }
+    }
+
 
     return {
         code: 201,
@@ -71,6 +81,7 @@ async function getStudentById(studentId){
     let filter = {
         studentId:studentId
     }
+
     const response = await Student.findOne(filter);
     if(response){
         return response
@@ -78,6 +89,21 @@ async function getStudentById(studentId){
         return {msg: "No student find with the specified criteria"}
     }  
 }
+
+async function getStudentByUserName(studentId){
+
+    let filter = {
+        name:studentId
+    }
+    
+    const response = await Student.findOne(filter);
+    if(response){
+        return response
+    } else {
+        return {msg: "No student find with the specified criteria"}
+    }  
+}
+
 
 
 async function updateStudentExerciseDetails(email, exerciseId, exerciseData) {
@@ -96,9 +122,6 @@ async function updateStudentExerciseDetails(email, exerciseId, exerciseData) {
     const update = { trainingData: previousTraining };
 
     await doc.updateOne(update);
-
-    // await doc.save();
-    
 }
 
 
@@ -132,7 +155,8 @@ module.exports = {
     updateStudentExerciseDetails,
     deleteStudent,
     deleteAllStudents,
-    addStudentTraining
+    addStudentTraining,
+    getStudentByUserName
 }
 
 
