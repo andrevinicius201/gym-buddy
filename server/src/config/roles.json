@@ -8,7 +8,15 @@
         "register_user",
         "delete_user",
         "update_user",
-        "update_user_training"
+        "update_user_training",
+        "get_all_exercises",
+        "get_exercise",
+        "create_exercise",
+        "update_exercise",
+        "delete_exercise",
+        "delete_all_exercises",
+        "get_all_users",
+        "create_activation_code"
       ]
     },
     {
@@ -18,14 +26,24 @@
         "get_user",
         "register_user",
         "update_user",
-        "update_user_training"
+        "update_user_training",
+        "get_all_exercises",
+        "get_exercise"
       ]
     },
     {
       "name": "student",
       "permissions": [
         "get_user",
-        "update_user_training"
+        "update_user_training",
+        "get_all_exercises",
+        "get_exercise"
+      ]
+    },
+    {
+      "name": "",
+      "permissions": [
+        "register_user"
       ]
     }
   ]

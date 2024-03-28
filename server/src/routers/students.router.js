@@ -7,7 +7,12 @@ const usersRouter = express.Router()
 
 usersRouter.get("/", rbacMiddleware.checkPermission('get_all_users'), httpGetAllStudents)
 usersRouter.get("/:id", rbacMiddleware.checkPermission('get_user'), httpGetStudentById)
-usersRouter.post("/", rbacMiddleware.checkPermission('register_user'), httpAddNewStudent)
+
+usersRouter.post("/", 
+    rbacMiddleware.checkPermission('register_user'), 
+    httpAddNewStudent
+)
+
 usersRouter.put("/:studentId/training", rbacMiddleware.checkPermission('update_user_training'), httpAddStudentTraining)
 
 

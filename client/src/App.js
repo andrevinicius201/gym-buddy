@@ -30,7 +30,7 @@ function PrivateRoute({ children, isPrivate }) {
   }
 
   if (isPrivate && !authenticated) {
-    return <Navigate to="/register" />
+    return <Navigate to="/login" />
   } else {
 
     return <>{children}</>
@@ -48,9 +48,18 @@ export default function App() {
           <Menu/>
           <Router>
             <Routes>
-                <Route exact path="/" element={<Home />} /> 
+                <Route 
+                  exact 
+                  path="/" 
+                  element={
+                    <PrivateRoute isPrivate={true}>
+                      <Home/>
+                    </PrivateRoute>
+                  }
+                /> 
 
-                <Route exact path="/register" element={<RegisterPage />} /> 
+                <Route exact path="/register" element={<RegisterPage />} />
+
                 <Route exact path="/login" element={<LoginPage />} /> 
                 
                 <Route
