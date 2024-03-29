@@ -6,9 +6,13 @@ import StudentAccountCreationForm from '../components/StudentAccountCreationForm
 import { HiOutlineExclamationCircle } from 'react-icons/hi';  
 import { deleteStudent } from '../functions/deleteStudent';
 import { useNavigate } from 'react-router-dom';
+import { useAuthContext } from "../hooks/useAuthContext"
 
 export default function StudentsList(){
 
+
+    const {user} = useAuthContext()
+    
     const navigate = useNavigate();
 
     const [openStudentRegistrationModal, setOpenStudentRegistrationModal] = useState(false);
@@ -40,7 +44,7 @@ export default function StudentsList(){
 
     return (
         <div>
-            
+            {JSON.stringify(user)}
             <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
                 <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">

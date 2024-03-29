@@ -12,6 +12,8 @@ router.post('/login', async (req, res) => {
     try {
         let username = req.body.user
         let password = req.body.password
+
+    
        
         const user = await StudentModel.getStudentByUserName(username);
 
@@ -26,13 +28,12 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Senha incorreta!' });
         }
 
-        const token = jwt.sign({ userId: user._id, subject: user.name, role:user.role}, 'your-secret-key', {
+        const token = jwt.sign({ userId: user._id, subject: user.name, role:user.role, userId:user.studentId}, 'your-secret-key', {
             expiresIn: '1h',
         });
 
-        
-
-        res.status(200).json({ token })
+    
+        res.status(200).json({ msg:'Authenticated successfully', token: token })
 
     } catch (error) {
         res.status(500).json({ error: 'Login failed' });

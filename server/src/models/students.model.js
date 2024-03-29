@@ -19,7 +19,7 @@ async function getAllStudents() {
 }
 
 async function addNewStudent(user){
-
+    
     const userDataIsValid = await Validator.checkUserData(user)
     
     if(!userDataIsValid){
@@ -30,16 +30,17 @@ async function addNewStudent(user){
     }
 
     try {
-
+        
         const newStudentId = await getLatestStudentId() + 1;
 
-        const hashedPassword = await bcrypt.hash(user.password, 10);
+        const hashedPassword = user.role != 'student' ? await bcrypt.hash(user.password, 10) : await bcrypt.hash(user.name, 10)
 
         Object.assign(user, {
             studentId: newStudentId,
             password: hashedPassword,
         })
         
+    
         const response = await Student.create(user)
         
         return {
@@ -47,6 +48,7 @@ async function addNewStudent(user){
             msg: "User successfully created!"
         }
     } catch(err){
+        
         return {
             code: 400,
             msg: `The following error occurred: ${err}`

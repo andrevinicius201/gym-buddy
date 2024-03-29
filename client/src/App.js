@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 
 import {
   BrowserRouter as Router,
@@ -7,36 +7,73 @@ import {
   Navigate
 } from "react-router-dom";
 
-import { Context } from './Context/AuthContext';
 
 import AllExercisesList from "./pages/ExercisesList";
 import StudentsList from "./pages/StudentsList";
 import Home from './pages/Home';
 import Menu from './components/Menu';
-import ActivationCodeCreationForm from './components/ActivationCodeCreationForm';
 import RegisterPage from './pages/GymActivation';
 import LoginPage from './pages/Login';
-import { AuthProvider } from './Context/AuthContext';
 import StudentTrainingEdit from './pages/StudentTrainingEdit';
 import { jwtDecode } from 'jwt-decode' 
 
+import { AuthContextProvider } from './Context/AuthContext'
 
-function PrivateRoute({ children, isPrivate }) {
+
+// function RequiresInstructorOrAboveRoute({ children, isPrivate }) {
  
-  const { loading, authenticated, role } = useContext(Context);
+//   const { loading, authenticated, role } = useContext(Context);
 
-  if (loading) {
-    return <p> Por favor, aguarde.. página em carregamento </p>;
-  }
+//   let userRole
 
-  if (isPrivate && !authenticated) {
-    return <Navigate to="/login" />
-  } else {
+//   try {
+//     userRole = localStorage.getItem('loggedUserRole')
+//   } catch(err){
+//     userRole = undefined
+//   }
 
-    return <>{children}</>
-  }
 
-}
+//   if (loading) {
+//     return <p> Por favor, aguarde.. página em carregamento </p>;
+//   }
+
+//   if (isPrivate && (!authenticated || userRole == 'student')) {
+//     return <Navigate to="/login" />
+//   } else {
+
+//     return <>{children}</>
+//   }
+
+// }
+
+
+// function RequiresABACValidationForStudents({ children, isPrivate }) {
+
+//   const { loading, authenticated, role } = useContext(Context);
+
+//   const { pathname } = window.location;
+//   const paths = pathname.split("/").filter(entry => entry !== "");
+//   const pathId = paths[paths.length - 1];
+
+//   let userRole, userId
+
+//   try {
+//     userRole = localStorage.getItem('loggedUserRole')
+//     userId = jwtDecode(localStorage.getItem('token')).userId
+//   } catch(err){
+//     userRole = undefined
+//   }
+  
+//   if (loading) {
+//     return <p> Por favor, aguarde.. página em carregamento </p>;
+//   }
+
+//   if (isPrivate && (!authenticated || (userRole == 'student' && userId != pathId))) {
+//     return <Navigate to="/login" />
+//   } else {
+//     return <>{children}</>
+//   }
+// }
 
 
 export default function App() {
@@ -44,62 +81,64 @@ export default function App() {
   localStorage.setItem('loggedUserRole', userRole)
 
   return (
-    <AuthProvider>
+    <AuthContextProvider>
           <Menu/>
           <Router>
             <Routes>
+                
                 <Route 
                   exact 
                   path="/" 
                   element={
-                    <PrivateRoute isPrivate={true}>
+                    // <RequiresInstructorOrAboveRoute isPrivate={true}>
                       <Home/>
-                    </PrivateRoute>
+                    // </RequiresInstructorOrAboveRoute>
                   }
                 /> 
 
-                <Route exact path="/register" element={<RegisterPage />} />
-
-                <Route exact path="/login" element={<LoginPage />} /> 
-                
                 <Route
                   path="/exercises"
                   element={
-                    <PrivateRoute isPrivate={true}>
+                    // <RequiresInstructorOrAboveRoute isPrivate={true}>
                       <AllExercisesList/>
-                    </PrivateRoute>
+                    // </RequiresInstructorOrAboveRoute>
                   }
                 />
 
                 <Route
                   path="/students"
                   element={
-                    <PrivateRoute isPrivate={true}>
+                    // <RequiresInstructorOrAboveRoute isPrivate={true}>
                       <StudentsList/>
-                    </PrivateRoute>
+                    // </RequiresInstructorOrAboveRoute>
                   }
-                />  
+                />
 
                 <Route
                   path="/students/:id"
                   element={
-                    <PrivateRoute isPrivate={true}>
+                    // <RequiresABACValidationForStudents isPrivate={true}>
                       <StudentTrainingEdit />
-                    </PrivateRoute>
+                    // </RequiresABACValidationForStudents>
                   }
                 />
 
-                <Route
+                {/* <Route
                   path="/administration/registration-code-creation"
                   element={
-                    <PrivateRoute isPrivate={true}>
+                    <RequiresInstructorOrAboveRoute isPrivate={true}>
                       <ActivationCodeCreationForm />
-                    </PrivateRoute>
+                    </RequiresInstructorOrAboveRoute>
                   }
-                />
+                /> */}
+
+                <Route exact path="/register" element={<RegisterPage />} />
+                <Route exact path="/login" element={<LoginPage />} /> 
+                
+              
           </Routes> 
         </Router> 
-    </AuthProvider>
+    </AuthContextProvider>
   )
 }
 

@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { useAuthContext } from "../hooks/useAuthContext"
 
 export default function StudentTrainingEdit(){
+
+    const {user} = useAuthContext()
 
     // Controlling load state
     const [studentDataisLoading, setStudentDataisLoading] = useState(true)
@@ -130,7 +133,6 @@ export default function StudentTrainingEdit(){
         return (
 
             <div class="m-8 w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-                
                     <div class="px-5 pb-5">
                         
                         <h5 class="mt-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{exerciseList[exerciseId].exerciseName}</h5>
@@ -163,7 +165,8 @@ export default function StudentTrainingEdit(){
     return (
         
         <div>
-                        <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
+            {JSON.stringify(user)}
+            <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
                 <div class="mx-auto max-w-screen-xl px-4 lg:px-12">
                     <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
                         <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">

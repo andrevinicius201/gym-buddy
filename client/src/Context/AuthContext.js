@@ -1,19 +1,37 @@
-import React, { createContext, useState, useEffect } from 'react';
+import { createContext, useReducer, useEffect } from 'react'
 
-import useAuth from './hooks/useAuth';
+export const AuthContext = createContext()
 
-const Context = createContext();
-
-function AuthProvider({ children }) {
-  const {
-    authenticated, role, loading, handleLogin, handleLogout,
-  } = useAuth();
-
-  return (
-    <Context.Provider value={{ loading, authenticated, role, handleLogin, handleLogout }}>
-      {children}
-    </Context.Provider>
-  );
+export const authReducer = (state, action) => {
+  switch (action.type) {
+    case 'LOGIN':
+      return { user: action.payload }
+    case 'LOGOUT':
+      return { user: null }
+    default:
+      return state
+  }
 }
 
-export { Context, AuthProvider };
+export const AuthContextProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(authReducer, { 
+    user: null
+  })
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    if (user) {
+      dispatch({ type: 'LOGIN', payload: user }) 
+    }
+  }, [])
+
+  console.log('AuthContext state:', state)
+  
+  return (
+    <AuthContext.Provider value={{ ...state, dispatch }}>
+      { children }
+    </AuthContext.Provider>
+  )
+
+}

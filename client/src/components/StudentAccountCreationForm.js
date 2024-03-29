@@ -1,19 +1,19 @@
 import React from "react"
 import axios from 'axios';
 import { useState } from 'react';
-import { Button, Toast } from 'flowbite-react';
+import { Toast } from 'flowbite-react';
 import { HiCheck } from 'react-icons/hi';
+
 
 export default function StudentAccountCreationForm () {
 
+    
     const [showToast, setShowToast] = useState(false);
     
     const [formData, setFormData] = React.useState(
         {
             name: "", 
-            password: "",
             role: "student",
-            trainingGoal: ""
         }
     )
 
@@ -28,17 +28,18 @@ export default function StudentAccountCreationForm () {
     }
 
 
-    function submitForm(formData){
-        axios.post(`http://localhost:8000/students`, formData)
-        .then(res => {
-          if((res.status) === 201){
-            setShowToast((state) => !state)
-          } else {
-            alert("nao funcionou")
-          }
-        })
-        .catch((err) => {
-            alert("Erro ao tentar registrar aluno")
+    async function submitForm(formData){
+        
+        await axios.post('/students', formData)
+            .then(res => {
+            if((res.status) === 201){
+                setShowToast((state) => !state)
+            } else {
+                alert("nao funcionou")
+            }
+            })
+            .catch((err) => {
+                alert("Erro ao tentar registrar aluno")
         })
     }
 
@@ -50,7 +51,7 @@ export default function StudentAccountCreationForm () {
     return (      
 
         <div> 
-       
+           
             <form class="max-w-sm mx-auto" onSubmit={handleSubmit}>
             <div class="mb-5">
                 <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome do aluno </label>

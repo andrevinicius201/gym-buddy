@@ -15,13 +15,15 @@ export default function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);
   const [role, setRole] = useState(undefined);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(undefined);
 
 
   useEffect(() => {
     const token = localStorage.getItem('token');
 
     if (token) {
-      api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+      // api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
+      api.defaults.headers.Authorization = token;
       setAuthenticated(true);
     }
 
@@ -32,11 +34,13 @@ export default function useAuth() {
     try {
       const { data: { token } } = await api.post('/auth/login', formData);
       // const tokenData = jwtDecode(token)
-      localStorage.setItem('token', JSON.stringify(token));
-      api.defaults.headers.Authorization = `Bearer ${token}`;
+      localStorage.setItem('token', token);
+      api.defaults.headers.Authorization = token;
       setAuthenticated(true);
       setRole(jwtDecode(token).role);
+      setUserId(jwtDecode(token).userId);
       alert("Usuário autenticado com sucesso! ")
+      return <Navigate to="/" />
     }
     catch(err) {
       alert("Usuário ou senha incorretos")
@@ -52,5 +56,5 @@ export default function useAuth() {
     api.defaults.headers.Authorization = undefined;
   }
   
-  return { authenticated, role, loading, handleLogin, handleLogout };
+  return { authenticated, role, loading, handleLogin, handleLogout, api, userId };
 }

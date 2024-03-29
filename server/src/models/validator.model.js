@@ -1,7 +1,7 @@
 const code_service = require("./activation-code.model")
 
 async function checkUserData(user) {
-    
+
     if(user.role != "gym-admin"){
         return true
     } 
