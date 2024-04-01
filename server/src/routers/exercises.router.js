@@ -12,6 +12,9 @@ exercisesRouter.post("/",
 httpAddExercise)
 exercisesRouter.put("/:id", rbacMiddleware.checkPermission('update_exercise'), httpUpdateExercise)
 exercisesRouter.delete("/:id", rbacMiddleware.checkPermission('delete_exercise'), httpDeleteExercise)
-exercisesRouter.delete("/", rbacMiddleware.checkPermission('delete_all_exercises'), httpDeleteAllExercises)
+exercisesRouter.delete("/", 
+    // rbacMiddleware.checkPermission('delete_all_exercises'), 
+    httpDeleteAllExercises
+)
 
 module.exports = exercisesRouter

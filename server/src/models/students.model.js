@@ -20,7 +20,9 @@ async function getAllStudents() {
 
 async function addNewStudent(user){
     
+    
     const userDataIsValid = await Validator.checkUserData(user)
+    
     
     if(!userDataIsValid){
         return {
@@ -33,7 +35,7 @@ async function addNewStudent(user){
         
         const newStudentId = await getLatestStudentId() + 1;
 
-        const hashedPassword = user.role != 'student' ? await bcrypt.hash(user.password, 10) : await bcrypt.hash(user.name, 10)
+        const hashedPassword = await bcrypt.hash(user.name, 10)
 
         Object.assign(user, {
             studentId: newStudentId,
@@ -97,6 +99,7 @@ async function getStudentByUserName(studentId){
     let filter = {
         name:studentId
     }
+
     
     const response = await Student.findOne(filter);
     if(response){

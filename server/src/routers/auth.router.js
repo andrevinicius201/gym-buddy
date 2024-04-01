@@ -5,15 +5,12 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-const {register} = require("../services/register.service")
-
-
 router.post('/login', async (req, res) => {
+    
     try {
+        
         let username = req.body.user
         let password = req.body.password
-
-    
        
         const user = await StudentModel.getStudentByUserName(username);
 
@@ -33,7 +30,7 @@ router.post('/login', async (req, res) => {
         });
 
     
-        res.status(200).json({ msg:'Authenticated successfully', token: token })
+        res.status(200).json({ msg:'Teste successfully', token: token, user_role: user.role, userId:user.studentId})
 
     } catch (error) {
         res.status(500).json({ error: 'Login failed' });

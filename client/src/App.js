@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
   BrowserRouter as Router,
@@ -10,75 +10,66 @@ import {
 
 import AllExercisesList from "./pages/ExercisesList";
 import StudentsList from "./pages/StudentsList";
+import InstructorList from "./pages/InstructorList";
 import Home from './pages/Home';
 import Menu from './components/Menu';
 import RegisterPage from './pages/GymActivation';
 import LoginPage from './pages/Login';
 import StudentTrainingEdit from './pages/StudentTrainingEdit';
-import { jwtDecode } from 'jwt-decode' 
 
+import { useAuthContext } from './hooks/useAuthContext'
 import { AuthContextProvider } from './Context/AuthContext'
 
+function getCurrentPageId(){
+  const paths = window
+  .location
+  .pathname
+  .split("/")
+  .filter(path => path !== "");
+  return paths[paths.length - 1]
+}
 
-// function RequiresInstructorOrAboveRoute({ children, isPrivate }) {
- 
-//   const { loading, authenticated, role } = useContext(Context);
+function checkPermissionForUser(user, requiredAccess){
 
-//   let userRole
+  if(requiredAccess == "instructorOrHigher"){
+    if (user && user.user_role != 'student'){
+      return true
+    } else {
+      return false
+    }
+  }
 
-//   try {
-//     userRole = localStorage.getItem('loggedUserRole')
-//   } catch(err){
-//     userRole = undefined
-//   }
+  if(requiredAccess == "granularIdBased"){
+    
+  let currentPageId = getCurrentPageId()
+    if(currentPageId == user.userId){
+      return true
+    } else {
+      return false
+    }
+  } 
+}
 
+function RequiredPrivilegedAccess({ children, requiredAccess }) {
 
-//   if (loading) {
-//     return <p> Por favor, aguarde.. página em carregamento </p>;
-//   }
+  const {user, loading} = useAuthContext()
 
-//   if (isPrivate && (!authenticated || userRole == 'student')) {
-//     return <Navigate to="/login" />
-//   } else {
+  if(loading){
+    return <h1> Please wait.. loading data</h1>
+  }
 
-//     return <>{children}</>
-//   }
-
-// }
-
-
-// function RequiresABACValidationForStudents({ children, isPrivate }) {
-
-//   const { loading, authenticated, role } = useContext(Context);
-
-//   const { pathname } = window.location;
-//   const paths = pathname.split("/").filter(entry => entry !== "");
-//   const pathId = paths[paths.length - 1];
-
-//   let userRole, userId
-
-//   try {
-//     userRole = localStorage.getItem('loggedUserRole')
-//     userId = jwtDecode(localStorage.getItem('token')).userId
-//   } catch(err){
-//     userRole = undefined
-//   }
+  let userIsAllowed = user && user.user_role != 'student' ? true : checkPermissionForUser(user, requiredAccess)
+  if(userIsAllowed){
+    return <>
+      {children}
+    </>  
+  } else {
+    return <Navigate to="/login" />
+  }
   
-//   if (loading) {
-//     return <p> Por favor, aguarde.. página em carregamento </p>;
-//   }
-
-//   if (isPrivate && (!authenticated || (userRole == 'student' && userId != pathId))) {
-//     return <Navigate to="/login" />
-//   } else {
-//     return <>{children}</>
-//   }
-// }
-
+}
 
 export default function App() {
-  const userRole = localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')).role : undefined
-  localStorage.setItem('loggedUserRole', userRole)
 
   return (
     <AuthContextProvider>
@@ -90,47 +81,47 @@ export default function App() {
                   exact 
                   path="/" 
                   element={
-                    // <RequiresInstructorOrAboveRoute isPrivate={true}>
+                    <RequiredPrivilegedAccess requiredAccess="instructorOrHigher">
                       <Home/>
-                    // </RequiresInstructorOrAboveRoute>
+                    </RequiredPrivilegedAccess>
                   }
                 /> 
 
                 <Route
                   path="/exercises"
                   element={
-                    // <RequiresInstructorOrAboveRoute isPrivate={true}>
+                    <RequiredPrivilegedAccess requiredAccess="instructorOrHigher">
                       <AllExercisesList/>
-                    // </RequiresInstructorOrAboveRoute>
+                    </RequiredPrivilegedAccess>
                   }
                 />
 
                 <Route
                   path="/students"
                   element={
-                    // <RequiresInstructorOrAboveRoute isPrivate={true}>
+                    <RequiredPrivilegedAccess requiredAccess="instructorOrHigher">
                       <StudentsList/>
-                    // </RequiresInstructorOrAboveRoute>
+                    </RequiredPrivilegedAccess>
+                  }
+                />
+
+                <Route
+                  path="/instructors"
+                  element={
+                    <RequiredPrivilegedAccess requiredAccess="instructorOrHigher">
+                      <InstructorList/>
+                    </RequiredPrivilegedAccess>
                   }
                 />
 
                 <Route
                   path="/students/:id"
                   element={
-                    // <RequiresABACValidationForStudents isPrivate={true}>
+                    <RequiredPrivilegedAccess requiredAccess="granularIdBased">
                       <StudentTrainingEdit />
-                    // </RequiresABACValidationForStudents>
+                    </RequiredPrivilegedAccess>
                   }
                 />
-
-                {/* <Route
-                  path="/administration/registration-code-creation"
-                  element={
-                    <RequiresInstructorOrAboveRoute isPrivate={true}>
-                      <ActivationCodeCreationForm />
-                    </RequiresInstructorOrAboveRoute>
-                  }
-                /> */}
 
                 <Route exact path="/register" element={<RegisterPage />} />
                 <Route exact path="/login" element={<LoginPage />} /> 

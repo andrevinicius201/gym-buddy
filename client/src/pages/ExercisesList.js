@@ -65,7 +65,7 @@ export default function AllExercisesList() {
     return (
         
         <div>
-                
+               
                 {(!exerciseListIsLoading) &&
                 <div>
                         <section class="bg-gray-50 dark:bg-gray-900 p-3 sm:p-5 antialiased">
@@ -389,17 +389,18 @@ export default function AllExercisesList() {
                                         <button type="submit" className="mx-auto text-center border text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Cadastrar exercício</button>
                                         
                                     </form>
-                                    <div className="space-y-4">
-                                    {showToast && (
-                                        <Toast>
-                                        <div className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
-                                            <HiCheck className="h-5 w-5" />
-                                        </div>
-                                        <div className="ml-3 text-sm font-normal">Exercicio adicionado com sucesso</div>
-                                        <Toast.Toggle onDismiss={() => setShowToast(false)} />
-                                        </Toast>
-                                    )}
-                                </div>
+                                    <div className="space-y-4 m-4 flex items-center justify-center">
+                                        {showToast && (
+                                            <Toast>
+                                                <div className="h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-green-100 text-green-500 dark:bg-green-800 dark:text-green-200">
+                                                    <HiCheck className="h-6 w-6" />
+                                                </div>
+                                                <div className="ml-3 text-sm font-normal"> Exercício adicionado com sucesso!</div>
+                                                <Toast.Toggle onDismiss={() => setShowToast(false)} />
+                                            </Toast>
+                                        )}
+                                    </div>
+                                    
         
                                 </div>
                                     </Modal.Body>
