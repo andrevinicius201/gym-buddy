@@ -1,3 +1,6 @@
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
 const Exercise = require("../models/exercises.mongo")
 
 const DEFAULT_EXERCISE_ID = 0;
@@ -12,48 +15,57 @@ async function getLatestExerciseId() {
 }
 
 async function getAllExercises() {
-    response = await Exercise.find({})
-    let transformedExercistList = {}
-    
-    response.forEach(obj => {
-        let exerciseId = obj.exerciseId
-        transformedExercistList[exerciseId] = {
-            exerciseName:obj.exerciseName,
-            muscularGroup:obj.muscularGroup,
-            exerciseDescription:obj.exerciseDescription
 
-        }
-    });
- 
-    return transformedExercistList
+    response = await prisma.exercise.findMany()
+    return response
+
 }
 
 
 async function addExercise(exercise){
-    const newExerciseId = await getLatestExerciseId() + 1;
-    const newExercise = Object.assign(exercise, {
-        exerciseId:newExerciseId
-    })
-    const response = await Exercise.create(newExercise);
-    return response
+    
+    const response = await prisma.exercise.create({
+        data: exercise,
+    });
+    
+    return {
+        code: 201,
+        msg: "Exercise successfully created!"
+    }
 }
 
-
 async function deleteExercise(exerciseId){
-    const response = await Exercise.deleteOne({ exerciseId: exerciseId })
+    let intExerciseId = parseInt(exerciseId)
+    const response = await prisma.exercise.delete({
+        where: {
+            exerciseId: intExerciseId,
+        }
+    })
     return response
 }
 
 
 async function deleteAllExercises(){
-    const response = await Exercise.deleteMany()
+    const response = await prisma.exercise.deleteMany()
     return response
 }
 
 async function updateExerciseDetails(exerciseId, updatedDetails){
     
-    const doc = await Exercise.findOne({ exerciseId: exerciseId });
-    const response = await doc.updateOne(updatedDetails);
+    if(exerciseExists.msg == 'No student find with the specified criteria'){
+        return "The specified student do not exists"
+    }
+
+    const response = await prisma.exercise.update({
+        where: {
+            exerciseId: parseInt(exerciseId),
+        },
+        data: {
+            exerciseName: updatedDetails.exerciseName,
+            muscularGroup: updatedDetails.muscularGroup,
+            description: updatedDetails.description,
+        }
+      })
 
     return response
 }

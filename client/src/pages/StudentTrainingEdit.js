@@ -6,15 +6,15 @@ export default function StudentTrainingEdit(){
 
     const {user} = useAuthContext()
 
-    // Controlling load state
+    // Controlling student-related load state
     const [studentDataisLoading, setStudentDataisLoading] = useState(true)
 
-    // Controlling load state
+    // Controlling exercise-related load state
     const [exercisesDataisLoading, setExerciseDataisLoading] = useState(true)
 
     // Getting current student's ID
-    let pathnameParts = window.location.pathname.split('/');
-    const studentId = pathnameParts[pathnameParts.length - 1];
+    let pathnameParts = window.location.pathname.split('/')
+    const studentId = parseInt(pathnameParts[pathnameParts.length - 1])
 
     // Getting student information, including its training data
     const [studentData, setStudentData] = useState([])
@@ -22,6 +22,7 @@ export default function StudentTrainingEdit(){
     // Getting existing exercises information
     const [exerciseList, setExerciseList] = useState([])
 
+    // Populating object with draft training data
     const [selection, setSelection] = useState({})
 
     function addExerciseToSelection(exerciseId){
@@ -57,6 +58,7 @@ export default function StudentTrainingEdit(){
     }
     
 
+    // Getting information related to students and exercises on page lage
     useEffect(() => {
         console.log(studentId)
         axios.get(`http://localhost:8000/students/${studentId}`)
@@ -73,6 +75,7 @@ export default function StudentTrainingEdit(){
 
     }, [])
 
+    // Updating selection based on student training data
     useEffect(() => {
         let practicedExercises = Object.keys(exerciseList)
         if(!studentDataisLoading && !exercisesDataisLoading && practicedExercises.length > 0){
@@ -130,9 +133,8 @@ export default function StudentTrainingEdit(){
         
     }
 
-
     function renderExerciseAndStatus(exerciseId){
-
+       
         return (
 
             <div class="mx-auto m-8 w-4/6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -149,20 +151,30 @@ export default function StudentTrainingEdit(){
                         </div>
                         <div>
                             
-                            <label for="series" /> Nº de séries
+                            <label for="series" /> Nº de séries: <span> {JSON.stringify(studentData["trainingData"]["1"]["series"])} </span>
                             <input type="number" 
                                 disabled={user.user_role=='student'} 
                                 name={"series_"+exerciseId} 
                                 value={studentData.trainingData && studentData.trainingData[exerciseId].serie} 
-                                placeholder="Quantidade de séries" onChange={handleChange} 
+                                placeholder={studentData["trainingData"]["1"]["series"]} onChange={handleChange} 
                                 class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                             />
                             <label for="repetitions" /> Nº de repetições
-                            <input type="number" disabled={user.user_role=='student'} name={"repetitions_"+exerciseId} placeholder="Quantidade de repetições por série" onChange={handleChange} class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input type="number" 
+                                disabled={user.user_role=='student'} 
+                                name={"repetitions_"+exerciseId} 
+                                placeholder={studentData.trainingData && studentData.trainingData[exerciseId].repetitions} 
+                                onChange={handleChange} 
+                                class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            />
                             <label for="load" /> Carga (KG)
-                            <input type="number" name={"load_"+exerciseId} placeholder="Carga (KG)" onChange={handleChange} class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input type="number" 
+                                name={"load_"+exerciseId} 
+                                placeholder={studentData.trainingData && studentData.trainingData[exerciseId].load} 
+                                onChange={handleChange} 
+                                class="mb-4 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                            />
                               
-                            
                             <br/>
                             <div>
                                 {
@@ -172,6 +184,7 @@ export default function StudentTrainingEdit(){
                             </div>
 
                         </div>
+                        {JSON.stringify(selection)}
                     </div>
             </div>   
             
@@ -183,7 +196,7 @@ export default function StudentTrainingEdit(){
         
         <div>
             
-            { !studentData.trainingData &&
+            {user.user_role == 'student' && !studentData.trainingData &&
                 <section class="bg-white dark:bg-gray-900">
                     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16">
                         <div class="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-8 md:p-12 mb-8">
@@ -277,7 +290,7 @@ export default function StudentTrainingEdit(){
                                                     <td class="px-4 py-3">{exerciseList[exerciseId].exerciseDescription}</td>
                                                     <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                                             <div class="flex items-center space-x-4">
-                                                                <button type="button" onClick={() => addExerciseToSelection(exerciseId)} data-modal-target="delete-modal" data-modal-toggle="delete-modal" class="flex items-center bg-green-700 hover:bg-green-800 text-white border border-green-800 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
+                                                                <button type="button" onClick={() => addExerciseToSelection(exerciseId)} data-modal-target="delete-modal" data-modal-toggle="delete-modal" class="flex items-center bg-green-700 text-white border border-green-800 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 text-center dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                                                     Adicionar ao treino
                                                                 </button>
                                                             </div>
@@ -337,7 +350,6 @@ export default function StudentTrainingEdit(){
                 </section>
             }   
 
-            {/* {JSON.stringify(studentData)}                  */}
                 
             {(!studentDataisLoading && !exercisesDataisLoading) &&
                 <div className="inline">                        

@@ -6,7 +6,7 @@ async function httpGetAllStudents(req, res){
 
 async function httpAddNewStudent(req, res){   
     response = await addNewStudent(req.body)
-    return res.status(response.code).json(response) 
+    return res.status(201).json(response) 
 }
 
 async function httpAddStudentTraining(req, res){

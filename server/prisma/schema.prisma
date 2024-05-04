@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Student {
+  studentId    Int        @id @default(autoincrement())
+  email        String     @unique
+  name         String
+  password     String
+  role         String
+  trainingGoal String?
+  isActive     Boolean
+  age          Int
+  Trainings    Training[]
+}
+
+model Training {
+  trainingId          Int                   @id @default(autoincrement())
+  trainingCategory    String
+  practitioner        Student               @relation(fields: [practitionerId], references: [studentId])
+  practitionerId      Int
+  ExercisesOnTraining ExercisesOnTraining[]
+}
+
+model ExercisesOnTraining {
+  training           Training @relation(fields: [trainingId], references: [trainingId])
+  trainingId         Int
+  exercise           Exercise @relation(fields: [exerciseExerciseId], references: [exerciseId])
+  exerciseId         Int
+  repetions          Int
+  Series             Int
+  load               Int
+  details            String
+  exerciseExerciseId Int
+
+  @@id([exerciseId, trainingId])
+}
+
+model Exercise {
+  exerciseId          Int                   @id @default(autoincrement())
+  exerciseName        String
+  muscularGroup       String
+  exerciseDescription String
+  ExercisesOnTraining ExercisesOnTraining[]
+}

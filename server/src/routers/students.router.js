@@ -21,8 +21,12 @@ httpAddStudentTraining)
 
 usersRouter.delete("/:studentId", 
     // rbacMiddleware.checkPermission('delete_user'), 
-httpDeleteStudent)
-usersRouter.delete("/", rbacMiddleware.checkPermission('delete_user'), httpDeleteAllStudents)
+    httpDeleteStudent)
+
+usersRouter.delete("/", 
+    // rbacMiddleware.checkPermission('delete_user'), 
+    httpDeleteAllStudents
+)
 
 // will be used only for updating user personal data. Currently not related to any screen
 usersRouter.put("/:id", 

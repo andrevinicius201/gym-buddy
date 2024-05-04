@@ -1,29 +1,21 @@
 const Student = require("../models/students.mongo")
 const Validator = require("../models/validator.model")
 const bcrypt = require("bcrypt")
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-const DEFAULT_STUDENT_ID = 0;
-
-async function getLatestStudentId() {
-    const latestRegisteredStudent = await Student.findOne().sort('-studentId');
-  
-    if (!latestRegisteredStudent) {
-      return DEFAULT_STUDENT_ID;
-    }  
-    return Number(latestRegisteredStudent.studentId);
-}
 
 async function getAllStudents() {
-    response = await Student.find({})
+    response = await prisma.student.findMany()
     return response
 }
 
-async function addNewStudent(user){
-    
-    
-    const userDataIsValid = await Validator.checkUserData(user)
-    
-    
+async function addNewStudent(user){ 
+    // For a while it will stay deactivated
+    // const userDataIsValid = await Validator.checkUserData(user)
+
+    const userDataIsValid = true
+
     if(!userDataIsValid){
         return {
             code: 400,
@@ -33,22 +25,19 @@ async function addNewStudent(user){
 
     try {
         
-        const newStudentId = await getLatestStudentId() + 1;
-
         const hashedPassword = await bcrypt.hash(user.name, 10)
 
         Object.assign(user, {
-            studentId: newStudentId,
             password: hashedPassword,
+            isActive: true,
         })
         
-    
-        const response = await Student.create(user)
+        const response = await prisma.student.create({
+            data: user,
+        });
         
-        return {
-            code: 201,
-            msg: "User successfully created!"
-        }
+        return response
+
     } catch(err){
         
         return {
@@ -81,12 +70,14 @@ async function addStudentTraining(studentId, trainingDetails){
 }
 
 async function getStudentById(studentId){
-
-    let filter = {
-        studentId:studentId
-    }
-
-    const response = await Student.findOne(filter);
+    let integerStudentId = parseInt(studentId)
+    
+    const response = await prisma.student.findUnique({
+        where: {
+            studentId:integerStudentId
+        }
+    })
+    
     if(response){
         return response
     } else {
@@ -94,14 +85,14 @@ async function getStudentById(studentId){
     }  
 }
 
-async function getStudentByUserName(studentId){
-
-    let filter = {
-        name:studentId
-    }
-
+async function getStudentByUserName(studentName){
     
-    const response = await Student.findOne(filter);
+    const response = await prisma.student.findUnique({
+        where: {
+            name:studentName
+        }
+    })
+    
     if(response){
         return response
     } else {
@@ -131,24 +122,30 @@ async function updateStudentExerciseDetails(email, exerciseId, exerciseData) {
 
 
 async function deleteStudent(studentId){
-    response = await Student.deleteOne({ studentId:studentId })
-    if(response.deletedCount){
-        return {
-            code: 201,
-            msg: "Student deleted successfully"
-        }
-    } else {
-        return {
-            code: 404,
-            msg: "No student was found with the given studentId"
-        }
+    
+    let intStudentId = parseInt(studentId)
+    const studentExists = await getStudentById(studentId)
+   
+    if(studentExists.msg == 'No student find with the specified criteria'){
+        return "The specified student do not exists"
+    }
+   
+    try {
+        const response = await prisma.student.delete({
+            where: {
+              studentId: intStudentId,
+            }
+        })
+        return response
+    } catch (err){
+        throw new Error(`The following error ocurred: ${err}`)
     }
     
 }
 
 
 async function deleteAllStudents(){
-    const response = await Student.deleteMany()
+    const response = await prisma.student.deleteMany()
     return response
 }
 
